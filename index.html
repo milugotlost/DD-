@@ -27,7 +27,10 @@
             </div>
             <div id="search-results" class="autocomplete-items hidden"></div>
           </div>
-          <input type="password" id="api-key-input" placeholder="OpenRouter API (選填)" />
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="password" id="api-key-input" placeholder="OpenRouter API (選填)" />
+            <span id="api-save-msg" style="position: absolute; right: -60px; color: var(--neon-green); font-size: 0.8rem; opacity: 0; transition: opacity 0.3s;">已儲存</span>
+          </div>
           <input type="text" id="session-input" placeholder="TV Session ID (選填)" />
         </div>
       </header>
@@ -65,7 +68,10 @@
 
           <!-- Ask DD -->
           <div class="glass-panel ask-dd-section" style="flex: 1;">
-            <h2>問問 DD 大師</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+              <h2 style="border-bottom: none; padding-bottom: 0;">問問 DD 大師</h2>
+              <span id="dd-mode-badge" style="font-size: 0.8rem; padding: 2px 8px; border-radius: 12px; background: rgba(255,184,0,0.2); color: var(--neon-yellow); border: 1px solid var(--neon-yellow);">🤡 模擬模式</span>
+            </div>
             <div class="ask-controls">
               <button id="ask-btn" class="neon-btn">呼叫 DD 尋求交易心法</button>
             </div>

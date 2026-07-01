@@ -6,6 +6,8 @@ const apiKeyInput = document.getElementById('api-key-input');
 const symbolSearch = document.getElementById('symbol-search');
 const searchBtn = document.getElementById('search-btn');
 const searchResults = document.getElementById('search-results');
+const apiSaveMsg = document.getElementById('api-save-msg');
+const ddModeBadge = document.getElementById('dd-mode-badge');
 
 const marketSignalEl = document.getElementById('market-signal');
 const ddActionEl = document.getElementById('dd-action');
@@ -224,6 +226,20 @@ function typewriterEffect(text) {
   }, 40);
 }
 
+function updateModeBadge() {
+  if (apiKeyInput.value.trim() !== '') {
+    ddModeBadge.innerText = "🟢 LLM 模型已啟用";
+    ddModeBadge.style.background = "rgba(0,255,136,0.2)";
+    ddModeBadge.style.color = "var(--neon-green)";
+    ddModeBadge.style.borderColor = "var(--neon-green)";
+  } else {
+    ddModeBadge.innerText = "🤡 模擬模式";
+    ddModeBadge.style.background = "rgba(255,184,0,0.2)";
+    ddModeBadge.style.color = "var(--neon-yellow)";
+    ddModeBadge.style.borderColor = "var(--neon-yellow)";
+  }
+}
+
 // Initializer
 window.addEventListener('DOMContentLoaded', () => {
   // Load saved API Key
@@ -231,10 +247,19 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedKey) {
     apiKeyInput.value = savedKey;
   }
+  updateModeBadge();
   
-  // Save API Key on change
-  apiKeyInput.addEventListener('change', (e) => {
+  // Save API Key on input/change
+  apiKeyInput.addEventListener('input', (e) => {
     localStorage.setItem('openRouterApiKey', e.target.value);
+    updateModeBadge();
+  });
+
+  apiKeyInput.addEventListener('change', () => {
+    apiSaveMsg.style.opacity = 1;
+    setTimeout(() => {
+      apiSaveMsg.style.opacity = 0;
+    }, 2000);
   });
 
   initMarquee();
