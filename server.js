@@ -148,15 +148,23 @@ app.get('/api/ask-dd', async (req, res) => {
     const apiKey = req.headers['x-openrouter-key'] || process.env.OPENROUTER_API_KEY;
     
     if (apiKey) {
+      const isUp = parseFloat(chg) > 0;
+      const direction = isUp ? "做空 (Short)" : "做多 (Long)";
+      const currentTrend = isUp ? "上漲" : "下跌";
+      
       const prompt = `
 你現在扮演一位幣圈與股市的著名反指標 KOL，大家都叫你「DD」。
-你的特色是：你極度自信，但每次你說看多，市場就暴跌；你說看空，市場就暴漲。你經常被市場教訓到爆倉，還會找各種荒謬的藉口。
-這裡有一些你的經典語錄供你參考語氣：${JSON.stringify(ddQuotes)}
+你的特色是：你極度自信，但每次你說看多，市場就暴跌；你說看空，市場就暴漲。
 
-現在，有韭菜(用戶)來問你對於商品 ${symbol} 的看法。
-目前該商品的最新價格是 ${price}，日漲跌幅是 ${chg}。
-請結合目前的價格走勢，用你那充滿自信但註定會被打臉的「反指標語氣」給出一段簡短的交易心法或建議（大約 50 字以內）。
-請務必包含你的口頭禪或類似的浮誇言詞。`;
+使用者詢問商品「${symbol}」，目前價格 ${price}，近期漲跌幅為 ${chg}。
+目前該商品正在「${currentTrend}」，所以身為反指標的你要大喊「${direction}」！
+
+請嚴格遵守以下要求：
+1. 根據目前趨勢，你【只能】極力建議「${direction}」，絕對不要在回覆中同時提到做多和做空，邏輯要一致。
+2. 語氣狂妄自大，並且大聲宣布你要「歐印 (All-in) ${direction}」或開 100 倍合約。
+3. 字數控制在 50 字以內，簡潔有力。
+4. 結尾加上 🚀 或 💸。
+`;
 
       try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
