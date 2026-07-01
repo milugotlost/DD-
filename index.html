@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DD 反向指標交易終端</title>
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app" class="terminal-container">
+      
+      <!-- Top Status Bar -->
+      <header class="glass-panel top-bar">
+        <div class="logo">
+          <h1>DD INVERSE TERMINAL</h1>
+          <span class="status-dot blink"></span>
+        </div>
+        <div class="controls">
+          <div class="search-container">
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+              <input type="text" id="symbol-search" placeholder="搜尋商品 (例: BTCUSDT, TSLA)" autocomplete="off" style="flex: 1;" />
+              <button id="search-btn" class="neon-btn" style="padding: 0.5rem; font-size: 1rem;">🔍</button>
+            </div>
+            <div id="search-results" class="autocomplete-items hidden"></div>
+          </div>
+          <input type="text" id="session-input" placeholder="TV Session ID (選填)" />
+        </div>
+      </header>
+
+      <!-- Main Layout -->
+      <main class="main-content">
+        <!-- Left: TradingView Chart -->
+        <section class="glass-panel chart-section">
+          <!-- TradingView Widget -->
+          <div class="tradingview-widget-container" id="tv-chart"></div>
+        </section>
+
+        <!-- Right: DD Analysis & Ask DD -->
+        <section class="right-panel">
+          
+          <!-- DD Inverse Analysis -->
+          <div class="glass-panel analysis-section">
+            <h2>DD 反向分析儀</h2>
+            <div class="indicator">
+              <span class="label">當前市場建議:</span>
+              <span id="market-signal" class="value text-neutral">載入中...</span>
+            </div>
+            <div class="indicator">
+              <span class="label">DD 預測動作:</span>
+              <span id="dd-action" class="value text-danger">---</span>
+            </div>
+            <div class="indicator highlight-box">
+              <span class="label">反向交易建議 (Anti-DD):</span>
+              <span id="anti-dd-signal" class="value text-success glow">---</span>
+            </div>
+            <div class="quote-box">
+              <p id="dd-quote">"每日睡醒都爆倉"</p>
+            </div>
+          </div>
+
+          <!-- Ask DD -->
+          <div class="glass-panel ask-dd-section" style="flex: 1;">
+            <h2>問問 DD 大師</h2>
+            <div class="ask-controls">
+              <button id="ask-btn" class="neon-btn">呼叫 DD 尋求交易心法</button>
+            </div>
+            <div class="ask-response" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+              <p id="ask-dd-response" class="typewriter-text" style="font-size: 1.1rem; line-height: 1.5; text-align: center;">點擊上方按鈕，DD 將為您解析當前商品</p>
+            </div>
+          </div>
+
+        </section>
+      </main>
+
+      <!-- Bottom Marquee -->
+      <footer class="marquee-container glass-panel">
+        <div class="marquee" id="marquee-content">
+          <!-- Populated by JS -->
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
