@@ -2,6 +2,7 @@ import './style.css';
 
 // DOM Elements
 const sessionInput = document.getElementById('session-input');
+const apiKeyInput = document.getElementById('api-key-input');
 const symbolSearch = document.getElementById('symbol-search');
 const searchBtn = document.getElementById('search-btn');
 const searchResults = document.getElementById('search-results');
@@ -194,7 +195,15 @@ function updateSimulatedSignals() {
 askBtn.addEventListener('click', async () => {
   askResponse.innerText = "DD 大師正在看盤思考中...";
   try {
-    const res = await fetch(`http://localhost:3000/api/ask-dd?symbol=${encodeURIComponent(currentSymbol)}`);
+    const headers = {};
+    if (apiKeyInput.value) {
+      headers['x-openrouter-key'] = apiKeyInput.value;
+    }
+    
+    const res = await fetch(`http://localhost:3000/api/ask-dd?symbol=${encodeURIComponent(currentSymbol)}`, {
+      headers
+    });
+    
     const data = await res.json();
     typewriterEffect(data.message || "發生錯誤");
   } catch (err) {
@@ -217,6 +226,17 @@ function typewriterEffect(text) {
 
 // Initializer
 window.addEventListener('DOMContentLoaded', () => {
+  // Load saved API Key
+  const savedKey = localStorage.getItem('openRouterApiKey');
+  if (savedKey) {
+    apiKeyInput.value = savedKey;
+  }
+  
+  // Save API Key on change
+  apiKeyInput.addEventListener('change', (e) => {
+    localStorage.setItem('openRouterApiKey', e.target.value);
+  });
+
   initMarquee();
   loadTVScript(() => {
     loadTVWidget(currentSymbol);

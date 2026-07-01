@@ -145,7 +145,9 @@ app.get('/api/ask-dd', async (req, res) => {
     const price = quoteData.price || '未知';
     const chg = quoteData.change ? quoteData.change.toFixed(2) : '未知';
     
-    if (process.env.OPENROUTER_API_KEY) {
+    const apiKey = req.headers['x-openrouter-key'] || process.env.OPENROUTER_API_KEY;
+    
+    if (apiKey) {
       const prompt = `
 你現在扮演一位幣圈與股市的著名反指標 KOL，大家都叫你「DD」。
 你的特色是：你極度自信，但每次你說看多，市場就暴跌；你說看空，市場就暴漲。你經常被市場教訓到爆倉，還會找各種荒謬的藉口。
@@ -160,7 +162,7 @@ app.get('/api/ask-dd', async (req, res) => {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            "Authorization": `Bearer ${apiKey}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
@@ -190,7 +192,7 @@ app.get('/api/ask-dd', async (req, res) => {
       const quotesInCategory = ddQuotes[randomCategory];
       const randomQuote = quotesInCategory[Math.floor(Math.random() * quotesInCategory.length)];
       
-      let analysis = `(這是模擬回覆，請在 .env 設定 GEMINI_API_KEY)\n這支 ${symbol} 現在價格 ${price} (漲跌 ${chg})！`;
+      let analysis = `(這是模擬回覆，請在上方填寫 API Key 啟用完整心法)\n這支 ${symbol} 現在價格 ${price} (漲跌 ${chg})！`;
       if (randomCategory === 'buy_dip') analysis += `現在跌剛好，無腦抄底怎麼輸！${randomQuote}`;
       else if (randomCategory === 'short') analysis += `這點位做空簡直送分題！${randomQuote}`;
       else analysis += `肯定是莊家在搞鬼！${randomQuote}`;
